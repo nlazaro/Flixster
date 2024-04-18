@@ -29,12 +29,26 @@ class MovieAdapter(private val context: Context, private val movies: List<Movie>
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         private val ivPoster = itemView.findViewById<ImageView>(R.id.ivPoster)
+        private val ivBackdrop = itemView.findViewById<ImageView>(R.id.ivBackdrop)
         private val tvTitle = itemView.findViewById<TextView>(R.id.tvTitle)
         private val tvOverview = itemView.findViewById<TextView>(R.id.tvOverview)
         fun bind(movie: Movie){
             tvTitle.text = movie.title
             tvOverview.text = movie.overview
-            Glide.with(context).load(movie.posterImageURL).into(ivPoster)
+            Log.d("MovieAdapter", "Poster image URL: ${movie.posterImageURL}")
+            ivPoster?.let{
+                Glide.with(context)
+                    .load(movie.posterImageURL)
+                    .error(R.color.default_placeholder)
+                    .into(ivPoster)
+            }
+            Log.d("MovieAdapter", "Backdrop image URL: ${movie.backdropImageURL}")
+            ivBackdrop?.let{
+                Glide.with(context)
+                    .load(movie.backdropImageURL)
+                    .error(R.color.default_placeholder)
+                    .into(ivBackdrop)
+            }
         }
     }
 }

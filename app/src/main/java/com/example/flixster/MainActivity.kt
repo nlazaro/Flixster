@@ -46,8 +46,10 @@ class MainActivity : AppCompatActivity() {
                 Log.i(TAG, "onSuccess: JSON data $json")
                 try{
                     val movieJsonArray = json.jsonObject.getJSONArray("results")
-                    movies.addAll(Movie.fromJsonArray(movieJsonArray))
-                    movieAdapter.notifyDataSetChanged()
+                    val curSize = movieAdapter.getItemCount()
+                    val newItems = Movie.fromJsonArray(movieJsonArray)
+                    movies.addAll(newItems)
+                    movieAdapter.notifyItemRangeInserted(curSize, newItems.size)
                     Log.i(TAG, "Movies list $movies")
                 }
                 catch (e: JSONException){
