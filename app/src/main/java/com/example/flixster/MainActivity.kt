@@ -1,9 +1,12 @@
 package com.example.flixster
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -32,7 +36,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         rvMovies = findViewById(R.id.rvMovies)
-        val movieAdapter = MovieAdapter(this, movies)
+        val movieAdapter = MovieAdapter(this, movies) {
+            movie -> launchDetailsActivity(movie as Movie)
+        }
         rvMovies.adapter = movieAdapter
         rvMovies.layoutManager = LinearLayoutManager(this)
 
@@ -58,5 +64,23 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
+
+    }
+
+    private fun launchDetailsActivity(contact: Movie){
+        val intent = Intent(this, DetailActivity::class.java)
+        intent.putExtra("MOVIE_EXTRA", contact.posterImageURL)
+        val profileView = findViewById<ImageView>(R.id.ivPoster)
+        if (profileView != null){
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                this,
+                profileView,
+                "moviePoster"
+            )
+            startActivity(intent, options.toBundle())
+        } else {
+            Log.w(TAG, "Movie image not found for transition animation")
+            startActivity(intent)
+        }
     }
 }

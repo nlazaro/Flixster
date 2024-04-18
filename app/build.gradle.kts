@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -47,5 +48,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.asynchttpclient)
     implementation(libs.glide)
+    annotationProcessor(libs.compiler)
+    implementation(libs.github.glide)
     annotationProcessor(libs.compiler)
 }
